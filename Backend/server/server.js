@@ -131,12 +131,14 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
+const itemRoutes = require('./routes/itemRoutes'); // if you have items
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
+// ✅ CORS (works locally + in production)
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: true,
   credentials: true
 }));
 
@@ -144,16 +146,29 @@ app.use(express.json());
 
 console.log('🚀 Backend starting...');
 
+// ✅ MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ MongoDB connected'))
-  .catch(err => console.error('❌ MongoDB error:', err));
+  .catch(err => {
+    console.error('❌ MongoDB error:', err.message);
+    process.exit(1);
+  });
 
+// ✅ Health check
 app.get('/', (req, res) => {
-  res.json({ message: 'Backend working' });
+  res.json({ message: 'Backend working ✅' });
 });
 
+// ✅ API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/items', itemRoutes); // remove if unused
 
+// ✅ 404 handler (always JSON)
+app.use((req, res) => {
+  res.status(404).json({ message: 'API route not found' });
+});
+
+// ✅ IMPORTANT: process.env.PORT
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
