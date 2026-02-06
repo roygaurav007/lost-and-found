@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
+import axiosInstance from "../utils/axios";
+
 
 const Signup = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });

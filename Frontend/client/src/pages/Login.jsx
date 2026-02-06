@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
+import axiosInstance from "../utils/axios";
 import { ArrowRight, Mail, Lock, ShieldCheck, GraduationCap } from 'lucide-react';
 
 const Login = () => {
